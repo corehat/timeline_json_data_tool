@@ -47,9 +47,22 @@
 			TL.ConfigFactory.makeConfig(data, function(config) {
 							option_data_google = config;
 						});
-			timeline = new TL.Timeline('timeline-embed', option_data_google);
-			
-			document.getElementById("google_spreadsheet_data_show").innerHTML = JSON.stringify(option_data_google);
+			if(option_data_google && option_data_google.events){
+				timeline = new TL.Timeline('timeline-embed', option_data_google);
+				
+				//处理日期格式
+				for(var i in option_data_google.events){
+					if(option_data_google.events[i].start_date){
+						var date = option_data_google.events[i].start_date.data;
+						option_data_google.events[i].start_date = {"month": date.month,"day": date.day,"year": date.year};
+					}
+					if(option_data_google.events[i].end_date){
+						var date = option_data_google.events[i].end_date.data;
+						option_data_google.events[i].end_date = {"month": date.month,"day": date.day,"year": date.year};
+					}
+				}
+				document.getElementById("google_spreadsheet_data_show").innerHTML = JSON.stringify(option_data_google);
+			}
 	    }
 	</script>
 </body>
